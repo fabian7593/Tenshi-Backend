@@ -23,10 +23,10 @@
         "PASSWORD_SALT" : "***ELIMINADO***"
     },
     "DB": {
-        "PORT": 3306,
+        "PORT": 3307,
         "HOST": "localhost",
         "USER": "root",
-        "PASSWORD": "password",
+        "PASSWORD": "",
         "NAME": "unbreakable",
         "CONNECTION_LIMIT": 150
     },
@@ -48,16 +48,21 @@
             "SECRET_KEY": "***ELIMINADO***"
         }
     },
-    "AWS": {
-        "BUCKET_NAME": "***ELIMINADO***",
-        "REGION": "us-east-2",
-        "ACCESS_KEY": "",
-        "SECRET_ACCESS_KEY": "",
-        "PUBLIC_FOLDER" : ""
+    "FILE":{
+        "GENERAL":{
+            "MAX_FILE_SIZE" : 50
+        },
+        "AWS": {
+            "BUCKET_NAME": "bu",
+            "REGION": "us-east-2",
+            "ACCESS_KEY": "",
+            "SECRET_ACCESS_KEY": "4F+C",
+            "PUBLIC_FOLDER" : ""
+        }
     },
     "EMAIL" : {
         "SERVICE" : "gmail",
-        "AUTH_USER": "",
+        "AUTH_USER": "usuario@example.com",
         "AUTH_PASSWORD": "",
         "EMAIL_FROM": "usuario@example.com",
         "CONTENT": {
@@ -66,4 +71,3 @@
         }
     }
 }
-
