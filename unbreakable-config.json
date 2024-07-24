@@ -23,10 +23,10 @@
         "PASSWORD_SALT" : "***ELIMINADO***"
     },
     "DB": {
-        "PORT": 3307,
+        "PORT": 3306,
         "HOST": "localhost",
         "USER": "root",
-        "PASSWORD": "",
+        "PASSWORD": "password",
         "NAME": "unbreakable",
         "CONNECTION_LIMIT": 150
     },
@@ -51,14 +51,14 @@
     "AWS": {
         "BUCKET_NAME": "***ELIMINADO***",
         "REGION": "us-east-2",
-        "ACCESS_KEY": "***ELIMINADO***",
-        "SECRET_ACCESS_KEY": "***ELIMINADO***",
+        "ACCESS_KEY": "",
+        "SECRET_ACCESS_KEY": "",
         "PUBLIC_FOLDER" : ""
     },
     "EMAIL" : {
         "SERVICE" : "gmail",
-        "AUTH_USER": "usuario@example.com",
-        "AUTH_PASSWORD": "***ELIMINADO***",
+        "AUTH_USER": "",
+        "AUTH_PASSWORD": "",
         "EMAIL_FROM": "usuario@example.com",
         "CONTENT": {
             "REGISTER_SUBJECT" : "Account Verification",
