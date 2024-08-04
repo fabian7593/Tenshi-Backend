@@ -57,18 +57,18 @@
             "MAX_FILE_SIZE" : 50
         },
         "AWS": {
-            "BUCKET_NAME": "bu-777",
-            "REGION": "us--2",
-            "ACCESS_KEY": "",
-            "SECRET_ACCESS_KEY": "4FFP++C",
+            "BUCKET_NAME": "***ELIMINADO***",
+            "REGION": "us-east-2",
+            "ACCESS_KEY": "***ELIMINADO***",
+            "SECRET_ACCESS_KEY": "***ELIMINADO***",
             "PUBLIC_FOLDER" : ""
         }
     },
     "EMAIL" : {
         "SERVICE" : "gmail",
-        "AUTH_USER": "@gmail.com",
-        "AUTH_PASSWORD": "",
-        "EMAIL_FROM": "@gmail.com",
+        "AUTH_USER": "usuario@example.com",
+        "AUTH_PASSWORD": "***ELIMINADO***",
+        "EMAIL_FROM": "usuario@example.com",
         "CONTENT": {
             "REGISTER_SUBJECT" : "Account Verification",
             "FORGOT_PASS_SUBJECT" : "Forgot Password",
