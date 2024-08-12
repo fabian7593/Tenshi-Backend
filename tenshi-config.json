@@ -13,6 +13,7 @@
         "SECRET_API_KEY": "***ELIMINADO***",
         "VALIDATE_API_KEY" : true,
         "PASSWORD_SALT" : "***ELIMINADO***",
+        "MAX_REQUEST_PER_SECOND": 6,
         "IS_DEBUGGING": true,
         "FAIL_LOGIN_MAX_NUMBER": 3,
         "DEFAULT_LANGUAGE" : "en",
