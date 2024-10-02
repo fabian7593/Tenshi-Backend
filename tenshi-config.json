@@ -15,7 +15,7 @@
         "SECRET_API_KEY": "***ELIMINADO***",
         "VALIDATE_API_KEY" : true,
         "MAX_REQUEST_PER_SECOND": 6,
-        "IS_DEBUGGING": true,
+        "IS_DEBUGGING": false,
         "FAIL_LOGIN_MAX_NUMBER": 3,
         "DEFAULT_LANGUAGE" : "en",
         "FORMAT_DATE" : "es-ES",
