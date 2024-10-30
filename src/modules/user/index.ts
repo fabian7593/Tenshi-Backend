@@ -1,3 +1,4 @@
+import UserController from './controllers/UserController';
 //Generic
 export { default as JWTService } from '@TenshiJS/helpers/JWT';
 export { hashPassword, verifyPassword } from "@TenshiJS/utils/encryptionUtils";
