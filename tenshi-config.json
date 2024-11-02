@@ -97,5 +97,9 @@
         "AUTH_USER": "***ELIMINADO***@gmail.com",
         "AUTH_PASSWORD": "***ELIMINADO***",
         "EMAIL_FROM": "***ELIMINADO***@gmail.com"
+    },
+    "TEST" : {
+        "JWT_TEST": "***ELIMINADO***",
+        "ROLE_TESt": "TEST"
     }
 }

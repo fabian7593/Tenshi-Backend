@@ -2,7 +2,7 @@ import path from 'path';
 import ConfigManager from '@TenshiJS/config/ConfigManager';
 const configPath = path.resolve(__dirname, '../../tenshi-config.json');
 const configManager = ConfigManager.getInstance(configPath);
-configManager.getConfig();
+const config = configManager.getConfig();
 
 import { RequestHandler } from '@TenshiJS/generics/index';
 import HttpAction from '@TenshiJS/helpers/HttpAction';
@@ -25,8 +25,8 @@ describe('GenericValidation', () => {
     let jwtData: JWTObject | null = null;
     let service: GenericService;
 
-    const jwt = '***ELIMINADO***';
-    const roleValidate = 'TEST';
+    const jwt = config.TEST.JWT_TEST;
+    const roleValidate = config.TEST.ROLE_TESt;
 
     beforeEach(async () => {
         req = {
