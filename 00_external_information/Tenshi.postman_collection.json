@@ -30,7 +30,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"email\": \"usuario@example.com\",\r\n  \"user_name\": null,\r\n  \"password\": \"SambaSoccer24*\"\r\n}\r\n\r\n",
+									"raw": "{\r\n  \"email\": \"***ELIMINADO***@gmail.com\",\r\n  \"user_name\": null,\r\n  \"password\": \"***ELIMINADO***\"\r\n}\r\n\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
