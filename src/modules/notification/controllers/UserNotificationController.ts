@@ -6,14 +6,12 @@ import { GenericRepository,
          JWTObject } from "@modules/index";
 
 import { UserNotification, Notification, User, 
-         UserNotificationDTO } from "@modules/notification/index";
+         UserNotificationDTO } from "@modules/01_General/notification/index";
 import { executeDatabaseQuery } from "@TenshiJS/persistance/DataBaseHelper/ExecuteQuery";
-import EmailService from "@TenshiJS/services/EmailServices/EmailService";
 
-import { getEmailTemplate } from "@TenshiJS/utils/htmlTemplateUtils";
 import {  ConstHTTPRequest, ConstMessagesJson, ConstStatusJson } from "@TenshiJS/consts/Const";
-import { ConstTemplate } from "@index/consts/Const";
-import { UserRepository } from "@index/modules/user";
+import { UserRepository } from "@modules/01_General/user";
+import { sendEmailAndUserNotification } from "../utils/NotificationUtils";
 
 export default  class UserNotificationController extends GenericController{
 
@@ -38,42 +36,24 @@ export default  class UserNotificationController extends GenericController{
     async insert(reqHandler: RequestHandler) : Promise<any>{
 
         return this.getService().insertService(reqHandler, async (jwtData, httpExec) => {
-            const repositoryUser = new GenericRepository(User);
-            const repositoryNotification = new GenericRepository(Notification);
-            const repositoryUserNotification = new GenericRepository(UserNotification);
+            const repositoryNotification = await new GenericRepository(Notification);
 
             //Get data From some tables
-            const userNotifications : UserNotification = reqHandler.getAdapter().entityFromPostBody();
-            const notification : Notification =
-                await repositoryNotification.findByCode(
-                    userNotifications.notification.code, 
-                    reqHandler.getLogicalDelete());
+            const userNotifications = reqHandler.getAdapter().entityFromPostBody();
+
+            const notification : Notification = await repositoryNotification.findByCode(userNotifications.notification, true);
             
-            if(notification != undefined && notification != null){
-                if(notification.required_send_email){
-                    const user : User = await repositoryUser.findById(userNotifications.user_receive.id, true);
-                    
-                    const variables = {
-                        userName: user.first_name + " " + user.last_name,
-                        emailSubject: notification.subject,
-                        emailContent: notification.message
-                    };
-                    const htmlBody = await getEmailTemplate(ConstTemplate.GENERIC_TEMPLATE_EMAIL, user.language, variables);
-                    const emailService = EmailService.getInstance();
-                    await emailService.sendEmail({
-                        toMail: user.email,
-                        subject: notification.subject,
-                        message: htmlBody,
-                        attachments: [] 
-                    });
-                }
-            }else{
+            if (!notification) {
                 return httpExec.dynamicError(ConstStatusJson.NOT_FOUND, ConstMessagesJson.DONT_EXISTS);
             }
+
+            const userNotificationAdded = await sendEmailAndUserNotification(userNotifications, {supplierName:"Doctor clinica bilbica", patientName:"Juan Perez"});
             
             try{
+                if(userNotificationAdded == null){
+                    return httpExec.dynamicError(ConstStatusJson.NOT_FOUND, ConstMessagesJson.DONT_EXISTS);
+                }
                 //Execute Action DB
-                const userNotificationAdded: UserNotification = await repositoryUserNotification.add(userNotifications);
                 const responseWithNewAdapter = (reqHandler.getAdapter() as UserNotificationDTO).entityToResponseCompleteInformation(userNotificationAdded, notification);
                 return httpExec.successAction(responseWithNewAdapter, ConstHTTPRequest.INSERT_SUCCESS);
             
@@ -85,11 +65,13 @@ export default  class UserNotificationController extends GenericController{
     }
 
 
+
+
     async update(reqHandler: RequestHandler): Promise<any>{
         return this.getService().updateService(reqHandler, async (jwtData, httpExec, id) => {
 
-            const repository = new GenericRepository(UserNotification);
-            const repositoryNotification = new GenericRepository(Notification);
+            const repository = await new GenericRepository(UserNotification);
+            const repositoryNotification = await new GenericRepository(Notification);
 
             //If you need to validate if the user id of the table 
             //should be the user id of the user request (JWT)
@@ -120,7 +102,40 @@ export default  class UserNotificationController extends GenericController{
         });
      }
 
-     async getByFilters(reqHandler: RequestHandler): Promise<any> {
+      async getAll(reqHandler: RequestHandler): Promise<any> {
+        return this.getService().getAllService(reqHandler, async (jwtData : JWTObject, httpExec: HttpAction, page: number, size: number) => {
+            try {
+
+                // Execute the get all action in the database
+
+                const entities = this.getRepository().findAll(reqHandler.getLogicalDelete(), reqHandler.getFilters(), page, size);
+                const pagination = this.getRepository().count(reqHandler.getLogicalDelete(), reqHandler.getFilters(), page, size);
+
+                if(entities != null && entities != undefined){
+
+                    const codeResponse : string = 
+                    reqHandler.getCodeMessageResponse() != null ? 
+                    reqHandler.getCodeMessageResponse() as string :
+                    ConstHTTPRequest.GET_ALL_SUCCESS;
+    
+                    // Return the success response
+                    return httpExec.successAction(
+                        reqHandler.getAdapter().entitiesToResponse(await entities), 
+                        codeResponse, await pagination);
+
+                }else{
+                    return httpExec.dynamicError(ConstStatusJson.NOT_FOUND, ConstMessagesJson.DONT_EXISTS);
+                }
+
+            } catch (error: any) {
+                // Return the database error response
+                return await httpExec.databaseError(error, jwtData.id.toString(),
+                    reqHandler.getMethod(), this.getControllerName());
+            }
+        });
+     }
+
+    /* async getByFilters(reqHandler: RequestHandler): Promise<any> {
         return this.getService().getAllService(reqHandler, async (jwtData : JWTObject, httpExec: HttpAction, page: number, size: number) => {
             try{
                 // Get the filters from the request query parameters
@@ -162,5 +177,5 @@ export default  class UserNotificationController extends GenericController{
                 return result;
             });
                      
-     }
+     }*/
 }

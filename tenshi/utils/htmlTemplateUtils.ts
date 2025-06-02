@@ -28,9 +28,11 @@ function loadMessages(language: string): { [key: string]: string } {
 }
 
 
-export function getMessageEmail(key: string, language: string): string {
+
+
+export function getMessageEmail(key: string, language: string, acronymous: string | null = null): string {
     const messages = loadMessages(language);
-    return messages[key + "Subject"];
+    return messages[key + (acronymous == null ? "Subject" : acronymous)];
 }
 
 /**
@@ -45,12 +47,7 @@ function replaceTemplateText(template: string, messages: { [key: string]: string
     let updatedTemplate = template;
     
     // Replace messages placeholders
-    for (const [key, value] of Object.entries(messages)) {
-        // Replace the message placeholder in the template
-        const placeholder = `{{ ${key} }}`;
-        const regex = new RegExp(placeholder, 'g');
-        updatedTemplate = updatedTemplate.replace(regex, value);
-    }
+     updatedTemplate = replaceVariables(updatedTemplate, messages);
 
       // Replace company related placeholders
       updatedTemplate = updatedTemplate
@@ -68,14 +65,22 @@ function replaceTemplateText(template: string, messages: { [key: string]: string
       .replace(/\{\{ year \}\}/g, new Date().getFullYear().toString());
 
     // Replace dynamic variables placeholders
-    for (const [key, value] of Object.entries(variables)) {
+     updatedTemplate = replaceVariables(updatedTemplate, variables);
+
+    return updatedTemplate;
+}
+
+
+export function replaceVariables(template:string, jsonData: { [key: string]: string }): string {
+
+    for (const [key, value] of Object.entries(jsonData)) {
         // Replace the variable placeholder in the template
         const placeholder = `{{ ${key} }}`;
         const regex = new RegExp(placeholder, 'g');
-        updatedTemplate = updatedTemplate.replace(regex, value);
+        template = template.replace(regex, value);
     }
 
-    return updatedTemplate;
+    return template;
 }
     
 

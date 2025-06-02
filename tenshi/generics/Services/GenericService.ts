@@ -7,6 +7,7 @@ import ConfigManager from 'tenshi/config/ConfigManager';
 import { ConstFunctions, ConstHTTPRequest, ConstMessagesJson, ConstStatusJson } from 'tenshi/consts/Const';
 import IGenericService from './IGenericService';
 import IGenericRepository from '../Repository/IGenericRepository';
+import { merge } from 'lodash';
 
 export default  class GenericService extends GenericValidation implements IGenericService {
    
@@ -57,7 +58,9 @@ export default  class GenericService extends GenericValidation implements IGener
     async insertService(reqHandler: RequestHandler, executeInsertFunction: (jwtData : JWTObject | null, httpExec: HttpAction, body: any) => void): Promise<any> {
         // Execute the returns structure
         const httpExec : HttpAction = reqHandler.getResponse().locals.httpExec;
-        let body = reqHandler.getAdapter().entityFromPostBody();
+        let body =
+                  reqHandler.getAdapter?.()?.entityFromPostBody?.() ??
+                  reqHandler.getRequest?.().body;
 
         try{
             // Validate the role of the user
@@ -291,15 +294,11 @@ export default  class GenericService extends GenericValidation implements IGener
                 if (await this.validateRole(reqHandler, jwtData.role, ConstFunctions.GET_ALL, httpExec) !== true) { return; }
 
                 const dynamicWhere = await this.validateDynamicRoleAccessGetByFiltering(reqHandler, jwtData);
-
                 const existingFilters = reqHandler.getFilters() ?? {};
 
                 const combinedFilters: FindManyOptions = {
                   ...existingFilters,
-                  where: {
-                    ...(existingFilters.where ?? {}),
-                    ...dynamicWhere,
-                  },
+                  where: merge({}, existingFilters.where ?? {}, dynamicWhere),
                 };
 
                 reqHandler.setFilters(combinedFilters);
