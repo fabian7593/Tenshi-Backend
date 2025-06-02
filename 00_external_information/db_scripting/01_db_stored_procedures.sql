@@ -26,8 +26,13 @@ BEGIN
         n.code AS notification_code,
         n.subject AS notification_subject,
         n.message AS notification_message,
+        n.another_message AS notification_another_message,
         n.required_send_email,
+        n.text_from_email_message_json,
         n.action_url,
+        n.email_template,
+        n.action_text,
+        n.language,
         s.id AS sender_id,
         s.email AS sender_email,
         r.id AS receiver_id,
@@ -35,15 +40,15 @@ BEGIN
     FROM
         user_notifications un
     INNER JOIN
-        notifications n ON un.notification_code = n.code
+        notifications n ON un.notification = n.code
     LEFT OUTER JOIN
-        users s ON un.id_user_send = s.id
+        users s ON un.user_send = s.id
     INNER JOIN
-        users r ON un.id_user_receive = r.id
+        users r ON un.user_receive = r.id
     WHERE
         un.is_deleted = 0
-        AND (COALESCE(pSenderEmail, '') = '' OR s.email = pSenderEmail)
-        AND (COALESCE(pReceiverEmail, '') = '' OR r.email = pReceiverEmail)
+        AND (COALESCE(pSenderEmail, '') = '' OR s.id = pSenderEmail)
+        AND (COALESCE(pReceiverEmail, '') = '' OR r.id = pReceiverEmail)
     LIMIT pLimit
     OFFSET pOffset;
 END //

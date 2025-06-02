@@ -38,6 +38,14 @@ export default class HttpAction{
         );
     }
 
+    dynamicErrorMessageDirectly(statusCode : string , errorMessage : string = "") {
+        // Get the message
+        const status = getStatus(statusCode);
+        return this.res.status(status.httpStatus).json(
+            responseStruct(status, null, errorMessage)
+        );
+    }
+
     dynamicError(statusCode : string , errorMessage : string = "") {
         // Get the message
         const status = getStatus(statusCode);

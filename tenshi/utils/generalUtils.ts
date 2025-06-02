@@ -62,3 +62,17 @@ export function getCurrentFunctionName(): string | undefined {
     const functionNameMatch = callerLine.trim().match(/at (.*?) /);
     return functionNameMatch ? functionNameMatch[1] : undefined;
 }
+
+
+
+ export function generateRandomCode(length: number = 7): string {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      
+      for (let i = 0; i < length; i++) {
+        const randomIdx = Math.floor(Math.random() * chars.length);
+        result += chars[randomIdx];
+      }
+    
+      return result;
+}

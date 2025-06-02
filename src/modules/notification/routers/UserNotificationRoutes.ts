@@ -1,11 +1,11 @@
 import { Request, Response, GenericRoutes,
          RequestHandler, RequestHandlerBuilder} from "@modules/index";
-import { default as UserNotificationController } from '@modules/notification/controllers/UserNotificationController';
-import { UserNotification, UserNotificationDTO, requiredBodyListUserNotifications } from '@modules/notification/index';
+import { default as UserNotificationController } from '@modules/01_General/notification/controllers/UserNotificationController';
+import { UserNotificationDTO, requiredBodyListUserNotifications } from '@modules/01_General/notification/index';
 
 class UserNotificationRoutes extends GenericRoutes {
     constructor() {
-        super(new UserNotificationController());
+        super(new UserNotificationController(), "/usernotification");
     }
 
     protected initializeRoutes() {
@@ -15,22 +15,21 @@ class UserNotificationRoutes extends GenericRoutes {
                                     new RequestHandlerBuilder(res,req)
                                     .setAdapter(new UserNotificationDTO(req))
                                     .setMethod("getUserNotificationById")
-                                    .isValidateRole("NOTIFICATION")
+                                    .isValidateRole("USER_NOTIFICATION")
                                     .isLogicalDelete()
                                     .build();
         
             this.getController().getById(requestHandler);
         });
         
-        
-        
-        this.router.get(`${this.getRouterName()}/get_by_filters`, async (req: Request, res: Response) => {
+
+         this.router.get(`${this.getRouterName()}/get_all`, async (req: Request, res: Response) => {
         
             const requestHandler : RequestHandler = 
                                     new RequestHandlerBuilder(res,req)
                                     .setAdapter(new UserNotificationDTO(req))
                                     .setMethod("getUserNotification")
-                                    .isValidateRole("NOTIFICATION")
+                                    .isValidateRole("USER_NOTIFICATION")
                                     .isLogicalDelete()
                                     .build();
         
@@ -45,35 +44,30 @@ class UserNotificationRoutes extends GenericRoutes {
                                     .setAdapter(new UserNotificationDTO(req))
                                     .setMethod("insertUserNotification")
                                     .setRequiredFiles(requiredBodyListUserNotifications(req))
-                                    .isValidateRole("NOTIFICATION")
+                                    .isValidateRole("USER_NOTIFICATION")
                                     .build();
         
             this.getController().insert(requestHandler);
         });
-        
         
         this.router.put(`${this.getRouterName()}/is_read`, async (req: Request, res: Response) => {
             const requestHandler : RequestHandler = 
                                     new RequestHandlerBuilder(res,req)
                                     .setAdapter(new UserNotificationDTO(req))
                                     .setMethod("updateUserNotification")
-                                    .isValidateRole("NOTIFICATION")
+                                    .isValidateRole("USER_NOTIFICATION")
                                     .isLogicalDelete()
-                                    .setDynamicRoleValidationByEntityField([
-                                        ["CUSTOMER", "user_receive.id"]
-                                    ])
                                     .build();
         
             this.getController().update(requestHandler);
         });
-        
         
         this.router.delete(`${this.getRouterName()}/delete`, async (req: Request, res: Response) => {
             const requestHandler : RequestHandler = 
                                     new RequestHandlerBuilder(res,req)
                                     .setAdapter(new UserNotificationDTO(req))
                                     .setMethod("deleteUserNotification")
-                                    .isValidateRole("NOTIFICATION")
+                                    .isValidateRole("USER_NOTIFICATION")
                                     .isLogicalDelete()
                                     .build();
         
