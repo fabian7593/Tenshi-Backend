@@ -1,71 +1,18 @@
-import { HttpAction, config } from "@index/index";
-import { DBPersistanceFactory } from "@TenshiJS/persistance/DBPersistanceFactory";
-
+import { HttpAction } from "@index/index";
 import { GenericRepository, 
          GenericController, RequestHandler,
          JWTObject } from "@modules/index";
-
 import { UserNotification, Notification, User, 
-         UserNotificationDTO } from "@modules/01_General/notification/index";
-import { executeDatabaseQuery } from "@TenshiJS/persistance/DataBaseHelper/ExecuteQuery";
-
+         UserNotificationDTO } from "@modules/notification/index";
 import {  ConstHTTPRequest, ConstMessagesJson, ConstStatusJson } from "@TenshiJS/consts/Const";
-import { UserRepository } from "@modules/01_General/user";
-import { sendEmailAndUserNotification } from "../utils/NotificationUtils";
 
 export default  class UserNotificationController extends GenericController{
 
     constructor() {
-        super(UserNotification,new UserRepository);
+        super(UserNotification);
     }
 
-    /**
-     * This function is used to insert a new user notification in the database.
-     * It performs the following steps:
-     * 1. Validates the role of the user.
-     * 2. Validates the required fields of the entity.
-     * 3. Validates the regex of the entity.
-     * 4. Executes the function provided as a parameter.
-     * 5. Returns a success response if the insertion is successful.
-     * 6. Returns a database error response if there is an error while inserting the entity.
-     * 7. Returns a general error response if there is an error while performing the above steps.
-     * 
-     * @param {RequestHandler} reqHandler - The request handler object.
-     * @return {Promise<any>} A promise that resolves to the success response if the insertion is successful.
-     */
-    async insert(reqHandler: RequestHandler) : Promise<any>{
-
-        return this.getService().insertService(reqHandler, async (jwtData, httpExec) => {
-            const repositoryNotification = await new GenericRepository(Notification);
-
-            //Get data From some tables
-            const userNotifications = reqHandler.getAdapter().entityFromPostBody();
-
-            const notification : Notification = await repositoryNotification.findByCode(userNotifications.notification, true);
-            
-            if (!notification) {
-                return httpExec.dynamicError(ConstStatusJson.NOT_FOUND, ConstMessagesJson.DONT_EXISTS);
-            }
-
-            const userNotificationAdded = await sendEmailAndUserNotification(userNotifications, {supplierName:"Doctor clinica bilbica", patientName:"Juan Perez"});
-            
-            try{
-                if(userNotificationAdded == null){
-                    return httpExec.dynamicError(ConstStatusJson.NOT_FOUND, ConstMessagesJson.DONT_EXISTS);
-                }
-                //Execute Action DB
-                const responseWithNewAdapter = (reqHandler.getAdapter() as UserNotificationDTO).entityToResponseCompleteInformation(userNotificationAdded, notification);
-                return httpExec.successAction(responseWithNewAdapter, ConstHTTPRequest.INSERT_SUCCESS);
-            
-            }catch(error : any){
-                return await httpExec.databaseError(error, jwtData!.id.toString(), 
-                reqHandler.getMethod(), this.getControllerName());
-            }
-        });
-    }
-
-
-
+  
 
     async update(reqHandler: RequestHandler): Promise<any>{
         return this.getService().updateService(reqHandler, async (jwtData, httpExec, id) => {
@@ -113,15 +60,10 @@ export default  class UserNotificationController extends GenericController{
 
                 if(entities != null && entities != undefined){
 
-                    const codeResponse : string = 
-                    reqHandler.getCodeMessageResponse() != null ? 
-                    reqHandler.getCodeMessageResponse() as string :
-                    ConstHTTPRequest.GET_ALL_SUCCESS;
-    
                     // Return the success response
                     return httpExec.successAction(
                         reqHandler.getAdapter().entitiesToResponse(await entities), 
-                        codeResponse, await pagination);
+                        ConstHTTPRequest.GET_ALL_SUCCESS, await pagination);
 
                 }else{
                     return httpExec.dynamicError(ConstStatusJson.NOT_FOUND, ConstMessagesJson.DONT_EXISTS);
