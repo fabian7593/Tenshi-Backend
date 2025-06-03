@@ -1,10 +1,10 @@
 
 import {  Request, IAdapterFromBody } from "@modules/index";
-import { Notification, UserNotification } from '@modules/01_General/notification/index';
-import { Subject } from "typeorm/persistence/Subject";
+import { Notification, UserNotification } from '@modules/notification/index';
 
 export default  class UserNotificationDTO implements IAdapterFromBody{
     req: Request;
+
 
     constructor(req: Request) {
         this.req = req;
@@ -21,6 +21,8 @@ export default  class UserNotificationDTO implements IAdapterFromBody{
             is_deleted : this.req.body.is_deleted || 0,
             subject: this.req.body.subject || null,
             payload: this.req.body.payload || null,
+            another_message: this.req.body.another_message || null,
+            email_message: this.req.body.email_message || null,
             notification_message: this.req.body.notification_message || null,
             acronymous : this.req.body.acronymous || null
         };
@@ -50,11 +52,16 @@ export default  class UserNotificationDTO implements IAdapterFromBody{
             notification: entity.notification,
             payload: entity.payload,
             subject: entity.subject,
+            another_message: entity.another_message,
+            email_message: entity.email_message,
             notification_message: entity.notification_message,
             is_read: entity.is_read,
             created_date: entity.created_date
         };
     }
+
+
+      
 
     entityToResponseCompleteInformation(entity: UserNotification, notification: Notification) : any{
        
