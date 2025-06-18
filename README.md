@@ -10,7 +10,7 @@ With Tenshi, developers benefit from a well-organized structure that enhances pr
 <br><br>
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/fabian7593/Tenshi-Backend)
-[![Chat with Tenshi GPT](https://img.shields.io/badge/Tenshi%20GPT-OpenAI-brightgreen?logo=chatbot)](https://chatgpt.com/g/g-683357ef1db88191b8832019669f2c6f-tenshi-ts-framework-specialisthttps://chatgpt.com/g/g-683357ef1db88191b8832019669f2c6f-tenshi-ts-framework-specialist)
+[![Chat with Tenshi GPT](https://img.shields.io/badge/Tenshi%20GPT-OpenAI-brightgreen?logo=chatbot)](https://chatgpt.com/g/g-683357ef1db88191b8832019669f2c6f-tenshi-ts-framework-specialist)
 
 
 ---
