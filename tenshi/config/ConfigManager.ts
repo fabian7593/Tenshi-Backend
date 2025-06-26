@@ -31,6 +31,7 @@ interface ServerConfig {
     FORMAT_DATE: string;
     MAX_REQUEST_PER_SECOND: number;
     CUSTOMER_REGULAR_ROLE: string;
+    IN_MAINTENANCE: boolean;
 }
 
 interface DbConfig {

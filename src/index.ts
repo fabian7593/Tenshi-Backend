@@ -51,6 +51,7 @@ import { ConstGeneral } from '@TenshiJS/consts/Const';
 import RouteNotFoundMiddleware from '@TenshiJS/middlewares/RouteNotFoundMiddleware';
 import { CorsHandlerMiddleware } from '@TenshiJS/middlewares/CorsHandlerMiddleware';
 import LoggingHandlerMiddleware from '@TenshiJS/middlewares/LoggingHandlerMiddleware';
+import { MaintenanceMiddleware } from '@TenshiJS/middlewares/MaintenanceMiddleware';
 
 
 //*************************************** */
@@ -87,6 +88,7 @@ export const TenshiMain = async() => {
 
     //Cors handler middle ware
     app.use(CorsHandlerMiddleware);
+    app.use(MaintenanceMiddleware);
     app.use(cors());
     app.use(bodyParser.json());
 
@@ -168,7 +170,18 @@ export const Shutdown = (callback: any) => {
 };
 
 
+process.on('SIGTERM', () => {
+  console.log('Closing Tenshi...');
+  Shutdown(() => {
+    console.log('Server Close Successfull.');
+    process.exit(0);
+  });
+});
+
+
 //*************************************** */
 //              START SERVER
 //*************************************** */
-TenshiMain();
+(async () => {
+  await TenshiMain();
+})();
