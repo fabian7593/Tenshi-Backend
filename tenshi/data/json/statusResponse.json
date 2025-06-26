@@ -58,6 +58,11 @@
       "name": "Too Many Requests",
       "id": 12,
       "httpStatus": 429
+  },
+  "SERVICE_UNAVAILABLE": {
+        "name": "Service Unavailable - Maintenance",
+        "id": 13,
+        "httpStatus": 503
   }
 }
 

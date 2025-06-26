@@ -30,6 +30,7 @@ export class ConstStatusJson {
     public static readonly ERROR: string =  "ERROR";
     public static readonly SUCCESS: string =  "SUCCESS";
     public static readonly REGEX: string =  "REGEX";
+    public static readonly SERVICE_UNAVAILABLE: string =  "SERVICE_UNAVAILABLE";
 }
 
 export class ConstMessagesJson {
